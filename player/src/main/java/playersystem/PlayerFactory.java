@@ -4,6 +4,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.*;
 import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
+import components.WrapAroundComponent;
 import data.EntityType;
 import services.IGamePluginService;
 
@@ -14,6 +15,7 @@ public class PlayerFactory implements EntityFactory, IGamePluginService {
             .type(EntityType.PLAYER)
             .bbox(new HitBox(BoundingShape.box(25, 40)))
             .with(new PlayerComponent())
+            .with(new WrapAroundComponent())
             .collidable()
             .build();
     }

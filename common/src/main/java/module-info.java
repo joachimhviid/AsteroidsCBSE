@@ -3,4 +3,5 @@ module common {
 
     exports data;
     exports services;
+    exports components;
 }
