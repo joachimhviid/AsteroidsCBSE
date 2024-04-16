@@ -2,19 +2,23 @@ package playersystem;
 
 import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyCode;
 
 import java.net.URL;
+
+import static com.almasb.fxgl.dsl.FXGL.*;
 
 public class PlayerComponent extends Component {
     private final double speed = 2;
     private Vec2 direction = new Vec2(0, 0);
 
     public PlayerComponent() {
-        Input input = FXGL.getInput();
+        Input input = getInput();
 
         input.addAction(new UserAction("Steer Left") {
             protected void onAction() {
@@ -32,8 +36,8 @@ public class PlayerComponent extends Component {
             }
         }, KeyCode.W);
         input.addAction(new UserAction("Shoot") {
-            protected void onAction() {
-                System.out.println("shoot");
+            protected void onActionBegin() {
+                shoot();
             }
         }, KeyCode.SPACE);
     }
@@ -49,10 +53,6 @@ public class PlayerComponent extends Component {
         entity.translate(direction);
 
         direction = direction.mul(0.99);
-
-        //if (direction.length() < 1) {
-        //    direction = direction.mul(0);
-        //}
     }
 
     public void steerRight() {
@@ -68,7 +68,13 @@ public class PlayerComponent extends Component {
     }
 
     public void shoot() {
-        System.out.println("shoot NYI");
+        Point2D spawnPoint = entity.getCenter().add(Vec2.fromAngle(entity.getRotation() - 90).mul(40).toPoint2D());
+        try {
+            spawn("bullet", new SpawnData(spawnPoint)
+                .put("direction", Vec2.fromAngle(entity.getRotation() - 90).toPoint2D()));
+        } catch (Exception e) {
+            System.out.println("Bullet plugin not loaded");
+        }
     }
 
     private String getUrlPrefixForAssets() {

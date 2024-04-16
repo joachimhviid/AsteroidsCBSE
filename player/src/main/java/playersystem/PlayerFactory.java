@@ -12,7 +12,7 @@ public class PlayerFactory implements EntityFactory, IGamePluginService {
     public Entity newPlayer(SpawnData data) {
         return FXGL.entityBuilder(data)
             .type(EntityType.PLAYER)
-            .bbox(new HitBox(BoundingShape.box(40, 70)))
+            .bbox(new HitBox(BoundingShape.box(25, 40)))
             .with(new PlayerComponent())
             .collidable()
             .build();
@@ -22,5 +22,11 @@ public class PlayerFactory implements EntityFactory, IGamePluginService {
     public void start(GameWorld world) {
         world.addEntityFactory(this);
         world.spawn("player", FXGL.getAppCenter());
+    }
+
+    @Override
+    public void stop(GameWorld world) {
+        world.removeEntityFactory(this);
+        world.removeEntities(world.getEntitiesByType(EntityType.PLAYER));
     }
 }
