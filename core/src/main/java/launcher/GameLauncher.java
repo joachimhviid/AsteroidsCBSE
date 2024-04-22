@@ -45,7 +45,6 @@ public class GameLauncher extends GameApplication {
 
         gamePlugins.forEach(plugin -> {
             plugin.start(FXGL.getGameWorld());
-
         });
 
     }
@@ -55,12 +54,20 @@ public class GameLauncher extends GameApplication {
         FXGL.onCollision(EntityType.BULLET, EntityType.ASTEROID, (bullet, asteroid) -> {
             bullet.removeFromWorld();
             try {
-                asteroid.getComponent(HealthIntComponent.class).damage(1);
+                HealthIntComponent healthComponent = asteroid.getComponent(HealthIntComponent.class);
+                healthComponent.damage(1);
             } catch (Exception e) {
                 System.out.println("Asteroid has no health component");
             }
+            asteroid.removeFromWorld();
             FXGL.inc("score", +1);
             score.setText("Destroyed asteroids: " + FXGL.getWorldProperties().getInt("score"));
+        });
+
+        FXGL.onCollision(EntityType.PLAYER, EntityType.ASTEROID, (player, asteroid) -> {
+            player.setPosition(FXGL.getAppCenter());
+            FXGL.set("score", 0);
+            score.setText("Destroyed asteroids: 0");
         });
     }
 

@@ -3,12 +3,13 @@ package asteroidsystem;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.dsl.components.ProjectileComponent;
-import com.almasb.fxgl.dsl.components.RandomMoveComponent;
 import com.almasb.fxgl.entity.*;
 import components.WrapAroundComponent;
 import data.EntityType;
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.util.Duration;
 import services.IGamePluginService;
 
 
@@ -25,8 +26,9 @@ public class AsteroidFactory implements EntityFactory, IGamePluginService {
             .type(EntityType.ASTEROID)
             .viewWithBBox(new Circle(radius, radius, radius, Color.SADDLEBROWN))
             .with(new HealthIntComponent(hp))
-            .with(new AsteroidComponent())
             .with(new WrapAroundComponent())
+            .with(new ProjectileComponent())
+            .with(new AsteroidComponent())
             .collidable()
             .build();
     }
@@ -34,7 +36,15 @@ public class AsteroidFactory implements EntityFactory, IGamePluginService {
     @Override
     public void start(GameWorld world) {
         world.addEntityFactory(this);
-        world.spawn("asteroid", 100, 100);
+        FXGL.run(() -> {
+            // Spawn an asteroid every 2 seconds with a maximum of 3 asteroids
+            if (world.getEntitiesByType(EntityType.ASTEROID).size() < 3) {
+                // Randomize the spawn location
+                double x = Math.random() * FXGL.getAppWidth();
+                double y = Math.random() * FXGL.getAppHeight();
+                FXGL.spawn("asteroid", new SpawnData(x, y));
+            }
+        }, Duration.seconds(2));
     }
 
     @Override

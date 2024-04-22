@@ -20,26 +20,30 @@ public class PlayerComponent extends Component {
     public PlayerComponent() {
         Input input = getInput();
 
-        input.addAction(new UserAction("Steer Left") {
-            protected void onAction() {
-                steerLeft();
-            }
-        }, KeyCode.A);
-        input.addAction(new UserAction("Steer Right") {
-            protected void onAction() {
-                steerRight();
-            }
-        }, KeyCode.D);
-        input.addAction(new UserAction("Accelerate") {
-            protected void onAction() {
-                accelerate();
-            }
-        }, KeyCode.W);
-        input.addAction(new UserAction("Shoot") {
-            protected void onActionBegin() {
-                shoot();
-            }
-        }, KeyCode.SPACE);
+        try {
+            input.addAction(new UserAction("Steer Left") {
+                protected void onAction() {
+                    steerLeft();
+                }
+            }, KeyCode.A);
+            input.addAction(new UserAction("Steer Right") {
+                protected void onAction() {
+                    steerRight();
+                }
+            }, KeyCode.D);
+            input.addAction(new UserAction("Accelerate") {
+                protected void onAction() {
+                    accelerate();
+                }
+            }, KeyCode.W);
+            input.addAction(new UserAction("Shoot") {
+                protected void onActionBegin() {
+                    shoot();
+                }
+            }, KeyCode.SPACE);
+        } catch (Exception e) {
+            System.out.println("Input already has actions with the same name");
+        }
     }
 
     @Override
