@@ -1,4 +1,4 @@
-package playersystem;
+package enemysystem;
 
 import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
@@ -8,35 +8,31 @@ import javafx.geometry.Point2D;
 
 import java.net.URL;
 
-import static com.almasb.fxgl.dsl.FXGL.*;
+import static com.almasb.fxgl.dsl.FXGL.spawn;
 
-public class PlayerComponent extends Component {
-    private final double speed = 2;
+public class EnemyComponent extends Component {
     private Vec2 direction = new Vec2(0, 0);
 
     @Override
     public void onAdded() {
         entity.getTransformComponent().setScaleOrigin(entity.getCenter());
-        entity.getViewComponent().addChild(FXGL.texture(url("textures/player_ship.png")));
+        entity.getViewComponent().addChild(FXGL.texture(url("textures/enemy_ship.png")));
     }
 
     @Override
     public void onUpdate(double tpf) {
+        direction = Vec2.fromAngle(entity.getRotation() - 90).mulLocal(1.1);
         entity.translate(direction);
 
-        direction = direction.mul(0.99);
-    }
+        if (Math.random() < 0.5) {
+            entity.rotateBy(1);
+        } else {
+            entity.rotateBy(-1);
+        }
 
-    public void steerRight() {
-        entity.rotateBy(3);
-    }
-
-    public void steerLeft() {
-        entity.rotateBy(-3);
-    }
-
-    public void accelerate() {
-        direction = Vec2.fromAngle(entity.getRotation() - 90).mulLocal(speed);
+        if (Math.random() < 0.01) {
+            shoot();
+        }
     }
 
     public void shoot() {
