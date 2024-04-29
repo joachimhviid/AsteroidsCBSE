@@ -5,4 +5,5 @@ module player {
     opens playersystem to com.almasb.fxgl.core;
 
     provides services.IGamePluginService with playersystem.PlayerFactory;
+    provides services.IInputService with playersystem.PlayerControl;
 }

@@ -5,4 +5,5 @@ module core {
     exports launcher to com.almasb.fxgl.core;
 
     uses services.IGamePluginService;
+    uses services.IInputService;
 }

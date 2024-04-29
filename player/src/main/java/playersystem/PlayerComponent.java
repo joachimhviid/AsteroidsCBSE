@@ -4,10 +4,7 @@ import com.almasb.fxgl.core.math.Vec2;
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
-import com.almasb.fxgl.input.Input;
-import com.almasb.fxgl.input.UserAction;
 import javafx.geometry.Point2D;
-import javafx.scene.input.KeyCode;
 
 import java.net.URL;
 
@@ -18,32 +15,6 @@ public class PlayerComponent extends Component {
     private Vec2 direction = new Vec2(0, 0);
 
     public PlayerComponent() {
-        Input input = getInput();
-
-        try {
-            input.addAction(new UserAction("Steer Left") {
-                protected void onAction() {
-                    steerLeft();
-                }
-            }, KeyCode.A);
-            input.addAction(new UserAction("Steer Right") {
-                protected void onAction() {
-                    steerRight();
-                }
-            }, KeyCode.D);
-            input.addAction(new UserAction("Accelerate") {
-                protected void onAction() {
-                    accelerate();
-                }
-            }, KeyCode.W);
-            input.addAction(new UserAction("Shoot") {
-                protected void onActionBegin() {
-                    shoot();
-                }
-            }, KeyCode.SPACE);
-        } catch (Exception e) {
-            System.out.println("Input already has actions with the same name");
-        }
     }
 
     @Override

@@ -8,6 +8,7 @@ import data.EntityType;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import services.IGamePluginService;
+import services.IInputService;
 
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,17 @@ public class GameLauncher extends GameApplication {
     }
 
     @Override
+    protected void initInput() {
+        System.out.println("Setting game inputs");
+        List<IInputService> gameInputs = ServiceLoader.load(IInputService.class)
+            .stream()
+            .map(ServiceLoader.Provider::get)
+            .toList();
+
+        gameInputs.forEach(IInputService::setInput);
+    }
+
+    @Override
     protected void initGameVars(Map<String, Object> vars) {
         vars.put("score", 0);
     }
@@ -43,9 +55,7 @@ public class GameLauncher extends GameApplication {
             .map(ServiceLoader.Provider::get)
             .toList();
 
-        gamePlugins.forEach(plugin -> {
-            plugin.start(FXGL.getGameWorld());
-        });
+        gamePlugins.forEach(plugin -> plugin.start(FXGL.getGameWorld()));
 
     }
 
@@ -64,11 +74,7 @@ public class GameLauncher extends GameApplication {
             score.setText("Destroyed asteroids: " + FXGL.getWorldProperties().getInt("score"));
         });
 
-        FXGL.onCollision(EntityType.PLAYER, EntityType.ASTEROID, (player, asteroid) -> {
-            player.setPosition(FXGL.getAppCenter());
-            FXGL.set("score", 0);
-            score.setText("Destroyed asteroids: 0");
-        });
+        FXGL.onCollision(EntityType.PLAYER, EntityType.ASTEROID, (player, asteroid) -> FXGL.getGameController().startNewGame());
     }
 
     @Override
