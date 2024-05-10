@@ -3,8 +3,6 @@ package launcher;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.dsl.components.HealthIntComponent;
-import data.EntityType;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import services.IGamePluginService;
@@ -60,13 +58,10 @@ public class GameLauncher extends GameApplication {
     }
 
     @Override
-    protected void initPhysics() {
-    }
-
-    @Override
     protected void initUI() {
-        score = new Text("Destroyed asteroids: 0");
+        score = new Text("Score: 0");
         score.setFill(Color.WHITE);
+        score.textProperty().bind(FXGL.getWorldProperties().intProperty("score").asString("Score: %d"));
         FXGL.addUINode(score, 10, 20);
     }
 }

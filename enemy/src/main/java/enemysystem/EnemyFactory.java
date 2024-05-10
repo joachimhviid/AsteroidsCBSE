@@ -6,7 +6,7 @@ import com.almasb.fxgl.physics.BoundingShape;
 import com.almasb.fxgl.physics.HitBox;
 import components.WrapAroundComponent;
 import data.EntityType;
-import javafx.geometry.Point2D;
+import javafx.util.Duration;
 import services.IGamePluginService;
 
 public class EnemyFactory implements EntityFactory, IGamePluginService {
@@ -24,7 +24,14 @@ public class EnemyFactory implements EntityFactory, IGamePluginService {
     @Override
     public void start(GameWorld world) {
         world.addEntityFactory(this);
-        world.spawn("enemy", Point2D.ZERO);
+        FXGL.run(() -> {
+            if (world.getEntitiesByType(EntityType.ENEMY).isEmpty()) {
+                // Randomize the spawn location
+                double x = Math.random() * FXGL.getAppWidth();
+                double y = Math.random() * FXGL.getAppHeight();
+                FXGL.spawn("enemy", new SpawnData(x, y));
+            }
+        }, Duration.seconds(2));
     }
 
     @Override
