@@ -5,4 +5,5 @@ module asteroid {
     opens asteroidsystem to com.almasb.fxgl.core;
 
     provides services.IGamePluginService with asteroidsystem.AsteroidFactory;
+    provides services.IAsteroidSplitter with asteroidsystem.AsteroidComponent;
 }

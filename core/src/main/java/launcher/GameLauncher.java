@@ -23,8 +23,8 @@ public class GameLauncher extends GameApplication {
 
     @Override
     protected void initSettings(GameSettings settings) {
-        settings.setWidth(600);
-        settings.setWidth(600);
+        settings.setWidth(800);
+        settings.setWidth(800);
         settings.setTitle("Asteroids");
 
         settings.setDeveloperMenuEnabled(true);
@@ -61,20 +61,6 @@ public class GameLauncher extends GameApplication {
 
     @Override
     protected void initPhysics() {
-        FXGL.onCollision(EntityType.BULLET, EntityType.ASTEROID, (bullet, asteroid) -> {
-            bullet.removeFromWorld();
-            try {
-                HealthIntComponent healthComponent = asteroid.getComponent(HealthIntComponent.class);
-                healthComponent.damage(1);
-            } catch (Exception e) {
-                System.out.println("Asteroid has no health component");
-            }
-            asteroid.removeFromWorld();
-            FXGL.inc("score", +1);
-            score.setText("Destroyed asteroids: " + FXGL.getWorldProperties().getInt("score"));
-        });
-
-        FXGL.onCollision(EntityType.PLAYER, EntityType.ASTEROID, (player, asteroid) -> FXGL.getGameController().startNewGame());
     }
 
     @Override

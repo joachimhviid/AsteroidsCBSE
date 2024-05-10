@@ -6,8 +6,9 @@ import com.almasb.fxgl.dsl.components.ProjectileComponent;
 import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.component.Component;
 import javafx.geometry.Point2D;
+import services.IAsteroidSplitter;
 
-public class AsteroidComponent extends Component {
+public class AsteroidComponent extends Component implements IAsteroidSplitter {
     ProjectileComponent projectileComponent;
     HealthIntComponent healthIntComponent;
 
@@ -29,5 +30,11 @@ public class AsteroidComponent extends Component {
         if (healthIntComponent.getValue() == 0) return;
         FXGL.spawn("asteroid", new SpawnData(entity.getPosition().add(10, 10)).put("hp", healthIntComponent.getValue()));
         FXGL.spawn("asteroid", new SpawnData(entity.getPosition().add(-10, -10)).put("hp", healthIntComponent.getValue()));
+    }
+
+    @Override
+    public void splitAsteroid() {
+        healthIntComponent.damage(1);
+        entity.removeFromWorld();
     }
 }
