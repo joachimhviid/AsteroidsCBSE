@@ -8,14 +8,35 @@ import javafx.scene.text.Text;
 import services.IGamePluginService;
 import services.IInputService;
 
+import java.lang.module.Configuration;
+import java.lang.module.ModuleFinder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 
 public class GameLauncher extends GameApplication {
-    private Text score;
+    private static ModuleLayer moduleLayer;
 
     public static void main(String[] args) {
+        Path pluginsDir = Paths.get("plugins");
+        ModuleFinder pluginFinder = ModuleFinder.of(pluginsDir);
+        List<String> plugins = pluginFinder
+            .findAll()
+            .stream()
+            .map(moduleReference -> moduleReference.descriptor().name())
+            .toList();
+
+        System.out.println("Plugins: " + plugins);
+
+        Configuration configuration = ModuleLayer
+            .boot()
+            .configuration()
+            .resolve(pluginFinder, ModuleFinder.of(), plugins);
+
+        moduleLayer = ModuleLayer.boot().defineModulesWithOneLoader(configuration, ClassLoader.getSystemClassLoader());
+
         launch(args);
     }
 
@@ -31,7 +52,7 @@ public class GameLauncher extends GameApplication {
     @Override
     protected void initInput() {
         System.out.println("Setting game inputs");
-        List<IInputService> gameInputs = ServiceLoader.load(IInputService.class)
+        List<IInputService> gameInputs = ServiceLoader.load(moduleLayer, IInputService.class)
             .stream()
             .map(ServiceLoader.Provider::get)
             .toList();
@@ -48,7 +69,7 @@ public class GameLauncher extends GameApplication {
     protected void initGame() {
         FXGL.getGameScene().setBackgroundColor(javafx.scene.paint.Color.BLACK);
 
-        List<IGamePluginService> gamePlugins = ServiceLoader.load(IGamePluginService.class)
+        List<IGamePluginService> gamePlugins = ServiceLoader.load(moduleLayer, IGamePluginService.class)
             .stream()
             .map(ServiceLoader.Provider::get)
             .toList();
@@ -59,7 +80,7 @@ public class GameLauncher extends GameApplication {
 
     @Override
     protected void initUI() {
-        score = new Text("Score: 0");
+        Text score = new Text("Score: 0");
         score.setFill(Color.WHITE);
         score.textProperty().bind(FXGL.getWorldProperties().intProperty("score").asString("Score: %d"));
         FXGL.addUINode(score, 10, 20);

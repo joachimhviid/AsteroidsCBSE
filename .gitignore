@@ -40,3 +40,4 @@ build/
 logs
 mods-mvn
 system
+plugins/*.jar
