@@ -5,6 +5,7 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import services.IGamePluginService;
 import services.IInputService;
 
@@ -16,6 +17,10 @@ public class GameLauncher extends GameApplication {
     private Text score;
 
     public static void main(String[] args) {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ModuleConfig.class);
+        for (String beanName : context.getBeanDefinitionNames()) {
+            System.out.println(beanName);
+        }
         launch(args);
     }
 
