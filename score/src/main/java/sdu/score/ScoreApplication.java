@@ -14,14 +14,20 @@ public class ScoreApplication {
 	}
 
 	@GetMapping("/score")
-	public String getScore() {
-		return "Microservice score: " + score;
+	public int getScore() {
+		return score;
 	}
 
 	@PostMapping("/score")
-	public String updateScore(@RequestParam(defaultValue = "1") int increment) {
+	public int updateScore(@RequestParam(defaultValue = "1") int increment) {
 		score += increment;
-		return "Microservice score: " + score;
+		return score;
+	}
+
+	@DeleteMapping("/score")
+	public int resetScore() {
+		score = 0;
+		return score;
 	}
 
 }

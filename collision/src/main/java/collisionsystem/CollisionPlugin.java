@@ -5,7 +5,10 @@ import com.almasb.fxgl.dsl.components.HealthIntComponent;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
 import data.EntityType;
+import data.ScoreClient;
 import services.IGamePluginService;
+
+import java.io.IOException;
 
 public class CollisionPlugin implements IGamePluginService {
     @Override
@@ -24,13 +27,21 @@ public class CollisionPlugin implements IGamePluginService {
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.ASTEROID, (bullet, asteroid) -> {
             bullet.removeFromWorld();
             splitAsteroid(asteroid);
-            FXGL.inc("score", +1);
+            try {
+                FXGL.set("score", new ScoreClient().updateScore(1));
+            } catch (IOException | InterruptedException e) {
+                System.out.println("Failed to update score");
+            }
         });
 
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.ENEMY, (bullet, enemy) -> {
             bullet.removeFromWorld();
             enemy.removeFromWorld();
-            FXGL.inc("score", +5);
+            try {
+                FXGL.set("score", new ScoreClient().updateScore(5));
+            } catch (IOException | InterruptedException e) {
+                System.out.println("Failed to update score");
+            }
         });
 
         FXGL.onCollisionBegin(EntityType.BULLET, EntityType.PLAYER, (bullet, player) -> FXGL.getGameController().startNewGame());
@@ -45,7 +56,11 @@ public class CollisionPlugin implements IGamePluginService {
         FXGL.onCollisionBegin(EntityType.ASTEROID, EntityType.ENEMY, (asteroid, enemy) -> {
             enemy.removeFromWorld();
             splitAsteroid(asteroid);
-            FXGL.inc("score", +1);
+            try {
+                FXGL.set("score", new ScoreClient().updateScore(1));
+            } catch (IOException | InterruptedException e) {
+                System.out.println("Failed to update score");
+            }
         });
     }
 

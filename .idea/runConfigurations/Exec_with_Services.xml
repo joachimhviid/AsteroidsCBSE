@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Exec with Services" type="CompoundRunConfigurationType">
+    <toRun name="AsteroidsCBSE [exec:exec]" type="MavenRunConfiguration" />
+    <toRun name="ScoreApplication" type="SpringBootApplicationConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>
