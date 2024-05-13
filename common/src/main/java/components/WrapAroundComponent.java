@@ -1,7 +1,9 @@
 package components;
 
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.component.Component;
+import javafx.geometry.Point2D;
 
 public class WrapAroundComponent extends Component {
     @Override
@@ -9,16 +11,22 @@ public class WrapAroundComponent extends Component {
         double screenWidth = FXGL.getAppWidth();
         double screenHeight = FXGL.getAppHeight();
 
-        if (entity.getX() > screenWidth) {
-            entity.setX(0);
-        } else if (entity.getX() < 0) {
-            entity.setX(screenWidth);
+        wrapAround(entity, screenWidth, screenHeight);
+    }
+
+    public Point2D wrapAround(Entity e, double screenWidth, double screenHeight) {
+        if (e.getX() > screenWidth) {
+            e.setX(0);
+        } else if (e.getX() < 0) {
+            e.setX(screenWidth);
         }
 
-        if (entity.getY() > screenHeight) {
-            entity.setY(0);
-        } else if (entity.getY() < 0) {
-            entity.setY(screenHeight);
+        if (e.getY() > screenHeight) {
+            e.setY(0);
+        } else if (e.getY() < 0) {
+            e.setY(screenHeight);
         }
+
+        return e.getPosition();
     }
 }
