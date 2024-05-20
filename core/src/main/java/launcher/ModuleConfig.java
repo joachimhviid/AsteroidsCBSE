@@ -11,8 +11,8 @@ import java.util.ServiceLoader;
 @Configuration
 public class ModuleConfig {
     @Bean
-    public GameLauncher gameLauncher() {
-        return new GameLauncher();
+    public Game game() {
+        return new Game(gameInputs(), gamePluginServices());
     }
 
     @Bean

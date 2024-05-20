@@ -106,7 +106,7 @@
                         <!--<argument>-XstartOnFirstThread</argument>-->
                         <argument>--module-path=mods-mvn</argument>
                         <argument>--class-path=libs/*</argument>
-                        <argument>--module=core/launcher.GameLauncher</argument>
+                        <argument>--module=core/launcher.Main</argument>
                         <!--                        <argument>&#45;&#45;add-modules com.almasb.fxgl.all</argument>-->
 
                     </arguments>

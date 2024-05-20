@@ -10,12 +10,18 @@ import services.IInputService;
 
 import java.util.List;
 import java.util.Map;
-import java.util.ServiceLoader;
 
-public class GameLauncher extends GameApplication {
+public class Game extends GameApplication {
     private Text score;
+    private final List<IInputService> gameInputs;
+    private final List<IGamePluginService> gamePlugins;
 
-    public static void main(String[] args) {
+    public Game(List<IInputService> gameInputs, List<IGamePluginService> gamePlugins) {
+        this.gameInputs = gameInputs;
+        this.gamePlugins = gamePlugins;
+    }
+
+    public void start(String[] args) {
         launch(args);
     }
 
@@ -31,10 +37,6 @@ public class GameLauncher extends GameApplication {
     @Override
     protected void initInput() {
         System.out.println("Setting game inputs");
-        List<IInputService> gameInputs = ServiceLoader.load(IInputService.class)
-            .stream()
-            .map(ServiceLoader.Provider::get)
-            .toList();
 
         gameInputs.forEach(IInputService::setInput);
     }
@@ -47,11 +49,6 @@ public class GameLauncher extends GameApplication {
     @Override
     protected void initGame() {
         FXGL.getGameScene().setBackgroundColor(javafx.scene.paint.Color.BLACK);
-
-        List<IGamePluginService> gamePlugins = ServiceLoader.load(IGamePluginService.class)
-            .stream()
-            .map(ServiceLoader.Provider::get)
-            .toList();
 
         gamePlugins.forEach(plugin -> plugin.start(FXGL.getGameWorld()));
 
